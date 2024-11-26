@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : CharacterController
+public abstract class EnemyController : CharacterController
 {
     [SerializeField] private EnemyDataSO _enemyData;
     public EnemyDataSO EnemyData => _enemyData;
@@ -10,16 +10,16 @@ public class EnemyController : CharacterController
     public Rigidbody2D rb => _rb;
     [SerializeField] private EnemyDamageable _enemyDamageable;
     public EnemyDamageable EnemyDamageable => _enemyDamageable;
-    [SerializeField] private EnemyContext _context;
-    public EnemyContext Context => _context;
+    [SerializeField] private EnemyAI _enemyAI;
+    public EnemyAI EnemyAI => _enemyAI;
     [SerializeField] private Directional _directional;
     public Directional Directional => _directional;
-    private EnemyStateMachine _enemyStateMachine;
+    protected EnemyStateMachine enemyStateMachine;
 
     protected virtual void Start()
     {
         this._directional = new EnemyDirectional(this);
-        this._enemyStateMachine = new EnemyStateMachine(this);
+        this.enemyStateMachine = InitEnemyStateMachine();
     }
 
     protected override void LoadComponent()
@@ -27,13 +27,8 @@ public class EnemyController : CharacterController
         base.LoadComponent();
         this.LoadRigidbody2D();
 
-        this.AutoLoad<EnemyContext>(ref this._context, GetComponent<EnemyContext>());
+        this.AutoLoad<EnemyAI>(ref this._enemyAI, GetComponent<EnemyAI>());
         this.AutoLoad<EnemyDamageable>(ref this._enemyDamageable, GetComponent<EnemyDamageable>());
-    }
-
-    protected virtual void Update()
-    {
-        this._enemyStateMachine.UpdateState();
     }
 
     private void LoadRigidbody2D()
@@ -43,4 +38,11 @@ public class EnemyController : CharacterController
         this._rb.angularDrag = 10;
         Debug.LogWarning("LoadRigidbody2D", gameObject);
     }
+
+    protected virtual void FixedUpdate()
+    {
+        this.enemyStateMachine?.ExcuteState();
+    }
+
+    protected abstract EnemyStateMachine InitEnemyStateMachine();
 }

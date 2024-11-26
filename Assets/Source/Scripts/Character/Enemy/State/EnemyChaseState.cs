@@ -13,17 +13,24 @@ public class EnemyChaseState : IState
 
     public void Enter()
     {
+        this.enemyCtrl.anim.SetBool("isRunning", true);
     }
 
     public void Exit()
     {
+        this.enemyCtrl.anim.SetBool("isRunning", false);
     }
 
     public void Excute()
     {
         if (enemyState.TryDeadState()) return;
 
-        Vector2 targetPosition = PlayerManager.Instance.GetPosition();
-        enemyCtrl.transform.position = Vector2.MoveTowards(enemyCtrl.transform.position, targetPosition, 3f * Time.deltaTime);
+        bool detectTarget = enemyCtrl.EnemyAI.ChasePlayer();
+
+        if (!detectTarget)
+        {
+            if (enemyState.TryPatrolState()) return;
+            if (enemyState.TryIdleState()) return;
+        }
     }
 }

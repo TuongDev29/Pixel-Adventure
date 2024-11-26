@@ -19,10 +19,10 @@ public abstract class Directional
     public void ChangeDirection(Vector2 direction)
     {
         if (direction.x == 0) return;
-        bool isRight = direction.x > 0;
-        if (this._isFacingRight == isRight) return;
+        bool isRightDirection = direction.x > 0;
+        if (this._isFacingRight == isRightDirection) return;
 
-        this._isFacingRight = isRight;
+        this._isFacingRight = isRightDirection;
         float yRot = this._isFacingRight ? 0 : 180;
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, yRot, transform.rotation.z);

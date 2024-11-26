@@ -24,6 +24,7 @@ public class EnemyIdleState : IState
     public void Excute()
     {
         if (enemyState.TryDeadState()) return;
-        enemyState.ChangeState(EnemyStateMachine.EEnemyState.Patrol);
+        if (enemyState.TryPatrolState()) return;
+        if (enemyState.TryChaseState()) return;
     }
 }

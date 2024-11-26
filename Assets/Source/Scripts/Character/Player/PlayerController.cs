@@ -19,10 +19,13 @@ public class PlayerController : CharacterController
     [SerializeField] private PlayerDirectional _playerDirectional;
     public PlayerDirectional playerDirectional => _playerDirectional;
 
-    protected virtual void Start()
+    protected virtual void OnEnable()
     {
         transform.position = CheckPointManager.Instance.CurrentPoint.GetPosition();
+    }
 
+    protected virtual void Start()
+    {
         _playerGroundedCheck = new PlayerGroundedCheck(this);
         _playerWallSlidingCheck = new PlayerWallSlidingCheck(this);
         _playerDirectional = new PlayerDirectional(this);
@@ -45,7 +48,7 @@ public class PlayerController : CharacterController
 
     protected virtual void Update()
     {
-        _playerState?.UpdateState();
+        _playerState?.ExcuteState();
 
         if (Input.GetKeyDown(KeyCode.F)) PlayerState.ChangeState(EPlayerState.Hurt);
     }

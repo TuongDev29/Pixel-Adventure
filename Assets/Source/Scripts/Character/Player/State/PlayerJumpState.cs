@@ -11,7 +11,7 @@ public class PlayerJumpState : IState, IObserveGrounded, IObserveWalled
         this.playerCtrl = _playerCtrl;
         this.playerState = playerState;
 
-        //Register Observe Grounded and Walled from PlayerGroundedCheck
+        //Register Observe Grounded and Walled from Player
         this.playerCtrl.PlayerGroundedCheck.RegisterObserveGrounded(this);
         this.playerCtrl.PlayerWallSlidingCheck.RegisterObserveWalled(this);
     }
@@ -62,10 +62,6 @@ public class PlayerJumpState : IState, IObserveGrounded, IObserveWalled
         playerCtrl.anim.SetBool("isGrounded", false);
     }
 
-    public void OnGroundedStay()
-    {
-    }
-
     public void OnWalledEnter()
     {
         this.ResetRemainJump();
@@ -73,9 +69,6 @@ public class PlayerJumpState : IState, IObserveGrounded, IObserveWalled
 
     public void OnWalledExit()
     {
-    }
 
-    public void OnWalledStay()
-    {
     }
 }

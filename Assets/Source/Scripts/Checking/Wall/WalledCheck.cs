@@ -26,19 +26,15 @@ public abstract class WalledCheck<T> : CollisionDirectionChecker<T> where T : cl
 
     protected override void OnChecking()
     {
-        if (this.IsWalled)
+        if (this.IsWalled != this.previousWalledState)
         {
-            if (!this.previousWalledState)
+            if (this.IsWalled)
                 this.NotifyWalledEnter();
-
-            this.NotifyWalledStay();
-        }
-        else
-        {
-            if (this.previousWalledState)
+            else
                 this.NotifyWalledExit();
+
+            this.previousWalledState = this.IsWalled;
         }
-        this.previousWalledState = this.IsWalled;
     }
 
     private void NotifyWalledEnter()
@@ -54,14 +50,6 @@ public abstract class WalledCheck<T> : CollisionDirectionChecker<T> where T : cl
         foreach (IObserveWalled observeWalled in observeWalleds)
         {
             observeWalled.OnWalledExit();
-        }
-    }
-
-    private void NotifyWalledStay()
-    {
-        foreach (IObserveWalled observeWalled in observeWalleds)
-        {
-            observeWalled.OnWalledStay();
         }
     }
 }

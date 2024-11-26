@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31d0dacfef702e046a872fb03bbab109, type: 3}
-  m_Name: Chicken
+  m_Name: Mushroom
   m_EditorClassIdentifier: 
-  characterName: Chicken
+  CharacterName: Mushroom
   maxHealth: 1
   moveSpeed: 4
   damage: 1
+  patrolWaitTime: 1
+  detectionRange: 0

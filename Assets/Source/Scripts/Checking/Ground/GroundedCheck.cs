@@ -3,7 +3,6 @@ using UnityEngine;
 
 public abstract class GroundedCheck<T> : CollisionDirectionChecker<T> where T : class, ICheckCollisionDown
 {
-    private bool previousGroundedState;
     public bool IsGrounded
     {
         get
@@ -11,11 +10,13 @@ public abstract class GroundedCheck<T> : CollisionDirectionChecker<T> where T : 
             return IsCollisionDown;
         }
     }
+    private bool previousGroundedState;
     private List<IObserveGrounded> observeGroundeds;
 
     protected GroundedCheck(MonoBehaviour monoBehaviour) : base(monoBehaviour)
     {
-        observeGroundeds = new List<IObserveGrounded>();
+        this.previousGroundedState = false;
+        this.observeGroundeds = new List<IObserveGrounded>();
     }
 
     public void RegisterObserveGrounded(IObserveGrounded observeGrounded)
@@ -26,19 +27,16 @@ public abstract class GroundedCheck<T> : CollisionDirectionChecker<T> where T : 
 
     protected override void OnChecking()
     {
-        if (this.IsGrounded)
+        if (this.IsGrounded != this.previousGroundedState)
         {
-            if (!this.previousGroundedState)
+            if (this.IsGrounded)
                 this.NotifyGroundedEnter();
-
-            this.NotifyGroundedStay();
-        }
-        else
-        {
-            if (this.previousGroundedState)
+            else
                 this.NotifyGroundedExit();
+
+            //Just update on change State
+            this.previousGroundedState = this.IsGrounded;
         }
-        this.previousGroundedState = this.IsCollisionDown;
     }
 
     private void NotifyGroundedEnter()
@@ -54,14 +52,6 @@ public abstract class GroundedCheck<T> : CollisionDirectionChecker<T> where T : 
         foreach (IObserveGrounded observeGrounded in observeGroundeds)
         {
             observeGrounded.OnGroundedExit();
-        }
-    }
-
-    private void NotifyGroundedStay()
-    {
-        foreach (IObserveGrounded observeGrounded in observeGroundeds)
-        {
-            observeGrounded.OnGroundedStay();
         }
     }
 }

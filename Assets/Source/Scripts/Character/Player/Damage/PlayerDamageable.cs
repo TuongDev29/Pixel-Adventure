@@ -9,7 +9,6 @@ public class PlayerDamageable : Damageable
     [SerializeField] protected float knockBackForce = 4f;
     [SerializeField] private Vector2 upwardForce;
 
-
     protected override void LoadComponent()
     {
         base.LoadComponent();

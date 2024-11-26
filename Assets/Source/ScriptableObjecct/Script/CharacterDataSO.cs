@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CharacterDataSO : ScriptableObject
 {
-    public string characterName;
+    [Header("Character Stats")]
+    public string CharacterName;
     public int maxHealth;
 }

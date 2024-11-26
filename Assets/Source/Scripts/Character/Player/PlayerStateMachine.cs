@@ -23,9 +23,9 @@ public class PlayerStateMachine : StateMachine
         this.ChangeState(EPlayerState.Idle);
     }
 
-    public override void UpdateState()
+    public override void ExcuteState()
     {
-        base.UpdateState();
+        base.ExcuteState();
 
         this.UpdateAnimator();
     }

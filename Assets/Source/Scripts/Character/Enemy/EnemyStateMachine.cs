@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
 
-public class EnemyStateMachine : StateMachine
+public abstract class EnemyStateMachine : StateMachine
 {
     public enum EEnemyState
     {
@@ -18,20 +17,21 @@ public class EnemyStateMachine : StateMachine
         this.enemyCtrl = monoBehaviour as EnemyController;
     }
 
-    protected override void InitializeState()
+    public virtual bool TryIdleState()
     {
-        //Add State
-        this.AddState(EEnemyState.Idle, new EnemyIdleState(enemyCtrl, this));
-        this.AddState(EEnemyState.Patrol, new EnemyPatrolState(enemyCtrl, this));
-        this.AddState(EEnemyState.Chase, new EnemyChaseState(enemyCtrl, this));
-        this.AddState(EEnemyState.Dead, new EnemyDeadState(enemyCtrl, this));
+        if (!this.ContainState(EEnemyState.Idle)) return false;
 
-        //Defalt enemy State
-        this.ChangeState(EEnemyState.Idle);
+        if (this.CompareState(EEnemyState.Patrol))
+        {
+            this.ChangeState(EEnemyState.Idle, enemyCtrl.EnemyData.patrolWaitTime);
+        }
+        return true;
     }
 
     public virtual bool TryDeadState()
     {
+        if (!this.ContainState(EEnemyState.Dead)) return false;
+
         if (this.enemyCtrl.EnemyDamageable.IsDead)
         {
             this.ChangeState(EEnemyState.Dead);
@@ -40,12 +40,20 @@ public class EnemyStateMachine : StateMachine
         return false;
     }
 
-    public virtual bool TryChaseState()
+    public bool TryPatrolState()
     {
-        if (!enemyCtrl.Context.canChasePlayer) return false;
+        if (!this.ContainState(EEnemyState.Patrol)) return false;
+        this.ChangeState(EEnemyState.Patrol);
+
+        return true;
+    }
+
+    public bool TryChaseState()
+    {
+        if (!this.ContainState(EEnemyState.Chase)) return false;
 
         if (Vector2.Distance(enemyCtrl.transform.position, PlayerManager.Instance.GetPosition())
-            < enemyCtrl.Context.sightRange)
+            < enemyCtrl.EnemyData.detectionRange)
         {
             this.ChangeState(EEnemyState.Chase);
             return true;

@@ -46,7 +46,7 @@ public abstract class StateMachine
         return null;
     }
 
-    public virtual void UpdateState()
+    public virtual void ExcuteState()
     {
         this.stateAction?.Excute();
     }
@@ -73,7 +73,6 @@ public abstract class StateMachine
 
     public void DelayTransition(float timer)
     {
-
         if (this.DelayTransitionAction != null)
             this.monoBehaviour.StopCoroutine(this.DelayTransitionAction);
 
@@ -86,6 +85,11 @@ public abstract class StateMachine
         if (this.state.ContainsKey(stateKey) && this.stateAction == state[stateKey])
             return true;
         return false;
+    }
+
+    public bool ContainState(Enum stateKey)
+    {
+        return this.state.ContainsKey(stateKey);
     }
 
     public void EnableTransition()

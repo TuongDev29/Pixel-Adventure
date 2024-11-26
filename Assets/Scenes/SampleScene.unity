@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 102899528}
   - component: {fileID: 102899530}
   - component: {fileID: 102899532}
-  - component: {fileID: 102899533}
+  - component: {fileID: 102899531}
   m_Layer: 7
   m_Name: Mushroom
   m_TagString: Enemy
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  enemyCtrl: {fileID: 102899532}
+  enemyCtrl: {fileID: 102899531}
 --- !u!114 &102899530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -513,9 +513,9 @@ MonoBehaviour:
   isDead: 0
   maxHealth: 1
   health: 0
-  enemyCtrl: {fileID: 102899532}
+  enemyCtrl: {fileID: 102899531}
   upwardForce: 4
---- !u!114 &102899532
+--- !u!114 &102899531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 102899524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b111dc06a605754c842bea2e2c3af0a, type: 3}
+  m_Script: {fileID: 11500000, guid: a22a4bba607429346b3f05b707398a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 250236936}
@@ -532,8 +532,8 @@ MonoBehaviour:
   _enemyData: {fileID: 11400000, guid: 284013804418c6742b26575962bbc6b5, type: 2}
   _rb: {fileID: 102899527}
   _enemyDamageable: {fileID: 102899530}
-  _context: {fileID: 0}
---- !u!114 &102899533
+  _enemyAI: {fileID: 102899532}
+--- !u!114 &102899532
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -545,14 +545,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f14a69b3b531de4396579e178094688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canChasePlayer: 0
-  patrolsDistance:
-  - -2
-  - 2
-  startPos: {x: 0, y: 0}
-  currentPatrolIndex: 0
-  sightRange: 10
-  attackRange: 2
+  patrolPoints:
+  - {x: -4, y: 0}
+  - {x: 1, y: 0}
+  currentPatrolPointIndex: 0
+  enemyCtrl: {fileID: 102899531}
 --- !u!1 &202563297
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,8 +755,8 @@ GameObject:
   - component: {fileID: 265270575}
   - component: {fileID: 265270574}
   - component: {fileID: 265270573}
-  - component: {fileID: 265270572}
   - component: {fileID: 265270571}
+  - component: {fileID: 265270577}
   m_Layer: 7
   m_Name: Chicken
   m_TagString: Enemy
@@ -795,32 +792,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f14a69b3b531de4396579e178094688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canChasePlayer: 0
-  patrolsDistance:
-  - 2
-  - -2
-  startPos: {x: 0, y: 0}
-  currentPatrolIndex: 0
-  sightRange: 10
-  attackRange: 2
---- !u!114 &265270572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 265270569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b111dc06a605754c842bea2e2c3af0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _anim: {fileID: 1799079916}
-  _collider2D: {fileID: 265270575}
-  _enemyData: {fileID: 11400000, guid: 8732ed71e6390c64a8f42bbd0242556d, type: 2}
-  _rb: {fileID: 265270576}
-  _enemyDamageable: {fileID: 265270573}
-  _context: {fileID: 265270571}
+  patrolPoints:
+  - {x: 1, y: 0}
+  - {x: -3, y: 0}
+  currentPatrolPointIndex: 0
+  enemyCtrl: {fileID: 265270577}
 --- !u!114 &265270573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,7 +812,7 @@ MonoBehaviour:
   isDead: 0
   maxHealth: 1
   health: 0
-  enemyCtrl: {fileID: 265270572}
+  enemyCtrl: {fileID: 265270577}
   upwardForce: 4
 --- !u!114 &265270574
 MonoBehaviour:
@@ -851,7 +827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  enemyCtrl: {fileID: 265270572}
+  enemyCtrl: {fileID: 265270577}
 --- !u!70 &265270575
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -914,6 +890,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &265270577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265270569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0c4d53db2486ca4382cdd6c0bb051f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anim: {fileID: 1799079916}
+  _collider2D: {fileID: 265270575}
+  _enemyData: {fileID: 11400000, guid: 8732ed71e6390c64a8f42bbd0242556d, type: 2}
+  _rb: {fileID: 265270576}
+  _enemyDamageable: {fileID: 265270573}
+  _enemyAI: {fileID: 265270571}
 --- !u!1 &274939971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1955,7 +1949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 967602415}
   m_Layer: 7
-  m_Name: Enemys
+  m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

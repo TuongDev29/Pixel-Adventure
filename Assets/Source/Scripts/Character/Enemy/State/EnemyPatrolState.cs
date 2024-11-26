@@ -28,27 +28,12 @@ public class EnemyPatrolState : IState
     {
         if (this.enemyState.TryDeadState()) return;
 
-        if (enemyCtrl.Context.patrolsDistance.Count == 0) return;
-
-        float targetX = enemyCtrl.Context.startPos.x + enemyCtrl.Context.patrolsDistance[enemyCtrl.Context.currentPatrolIndex];
-
-        // Tính vị trí tiếp theo dựa trên khoảng cách X
-        float progress = enemyCtrl.EnemyData.moveSpeed * Time.fixedDeltaTime / Mathf.Abs(targetX - transform.position.x);
-        float nextX = Mathf.Lerp(transform.position.x, targetX, progress);
-
-        Vector2 targetPosition = new Vector2(nextX, transform.position.y);
-
-        enemyCtrl.rb.MovePosition(targetPosition);
-
-        // Check distance
-        if (Mathf.Abs(targetX - transform.position.x) < 0.1f)
+        bool isNextPatrolPoint = enemyCtrl.EnemyAI.MoveNextToPatrolPoint();
+        if (isNextPatrolPoint)
         {
-            enemyCtrl.Directional.ToggleDirection();
-
-            enemyCtrl.Context.currentPatrolIndex = (enemyCtrl.Context.currentPatrolIndex + 1) % enemyCtrl.Context.patrolsDistance.Count;
-            enemyState.ChangeState(EnemyStateMachine.EEnemyState.Idle, 0.4f);
+            if (enemyState.TryIdleState()) return;
         }
 
-        if (enemyState.TryChaseState()) return;
+        if (this.enemyState.TryChaseState()) return;
     }
 }

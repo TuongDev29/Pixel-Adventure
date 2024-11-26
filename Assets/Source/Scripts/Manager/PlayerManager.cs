@@ -8,6 +8,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] protected CinemachineVirtualCamera virtualCamera;
     [SerializeField] protected List<PlayerController> playersCtrl = new List<PlayerController>();
     [SerializeField] protected PlayerController currentPlayer;
+    public PlayerController CurrentPlayer => currentPlayer;
 
     protected override void Awake()
     {
